@@ -19,10 +19,6 @@ vault:
   enable: false
   amount: 10000.0
 
-playerpoints:
-  enable: false
-  amount: 100
-
 punish:
   enable: false
   command: 'jail {player} j1'
