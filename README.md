@@ -11,6 +11,13 @@ punish:
   enable: false
   command: jail {player} j1
 ```
+## Permissions
+- **dr.bypass** - *Permission to cancel the wait respawn process*
+- **dr.help** - *Permission to show display help command*
+- **dr.setlocation** - *Permission to set respawn location*
+- **dr.removelocation** - *Permission to remove respawn location*
+- **dr.tplocation** - *Permission to teleport to respawn location*
+- **dr.locationinfo** - *Permission to show info of location*
 ## Build With
 - [Maven](https://maven.apache.org/) - Dependency Management
 ## Authors
