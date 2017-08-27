@@ -1,6 +1,14 @@
 ## DeathRespawn
 > "Added cooldown to respawn like Bedwars, Skywars, etc.
 I do not know how it could help you, but I hope it adds some special features to your server."
+## Category
+1. [Soft-dependencies](https://github.com/TrieuCoding/DeathRespawn/blob/master/README.md#soft-dependencies)
+2. [Commands](https://github.com/TrieuCoding/DeathRespawn/blob/master/README.md#commands)
+3. [Permissions](https://github.com/TrieuCoding/DeathRespawn/blob/master/README.md#permissions)
+4. [Build With](https://github.com/TrieuCoding/DeathRespawn/blob/master/README.md#build-with)
+5. [Authors](https://github.com/TrieuCoding/DeathRespawn/blob/master/README.md#authors)
+6. [Supporting](https://github.com/TrieuCoding/DeathRespawn/blob/master/README.md#supporting)
+7. [Configuration](https://github.com/TrieuCoding/DeathRespawn/blob/master/README.md#configuration)
 ## Soft-dependencies
 - [Vault](https://dev.bukkit.org/projects/vault) - If Economy is not setup, it will disable Vault feature in config and replace to punish.
 ```
