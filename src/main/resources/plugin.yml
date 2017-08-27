@@ -18,8 +18,10 @@ permissions:
   dr.help:
     description: Permission to show display help command
   dr.setlocation:
-      description: Permission to set respawn location
+    description: Permission to set respawn location
   dr.removelocation:
-      description: Permission to remove respawn location
+    description: Permission to remove respawn location
   dr.tplocation:
-      description: Permission to teleport to respawn location
+    description: Permission to teleport to respawn location
+  dr.locationinfo:
+    description: Permission to show info of location
