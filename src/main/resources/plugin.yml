@@ -1,0 +1,25 @@
+name: DeathRespawn
+version: 1.0
+main: com.spigot.dr.Main
+prefix: DeathRespawn
+load: STARTUP
+softdepend: [Vault]
+authors: [TrieuCoding]
+description: A plugin added cooldown to respawn
+
+commands:
+  deathrespawn:
+    description: Main command
+    usage: /<command>
+    aliases: [dr]
+permissions:
+  dr.bypass:
+    description: Permission to cancel the wait respawn process
+  dr.help:
+    description: Permission to show display help command
+  dr.setlocation:
+      description: Permission to set respawn location
+  dr.removelocation:
+      description: Permission to remove respawn location
+  dr.tplocation:
+      description: Permission to teleport to respawn location

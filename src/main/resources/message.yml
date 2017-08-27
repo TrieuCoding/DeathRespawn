@@ -1,0 +1,18 @@
+prefix: '&7[&cDeathRespawn&7]&r '
+vault-notify: '&cYou just exited the server while respawn, you will be confiscated &f{amount}&e$'
+playerpoints-notify: '&cYou just exited the server while respawn, you will be confiscated &f{amount}&e points'
+punish-notify: '&cYou just exited the server while respawn'
+no-permissions: '&cYou dont have permissions to do this!'
+reload: '&aReload config!'
+message:
+  enable: false
+  countdown: '&fYou will be respawn in &e{seconds} &fseconds'
+  respawn: '&aYou have been respawn!'
+title:
+  enable: true
+  title:
+    countdown: '&c&lYOU DIED'
+    respawn: '&c&lRESPAWN'
+  subtitle:
+    countdown: '&fYou will be respawn in &e{seconds} &fseconds'
+    respawn: '&fYou have been respawn!'

@@ -1,0 +1,41 @@
+respawn-cooldown: 5
+
+countdown:
+  countdown-gamemode: 'SPECTATOR'
+  respawn-gamemode: 'SURVIVAL'
+  damage: false
+  move: false
+  chat: true
+  use-command: false
+  blindness: true
+
+respawn:
+  enable: false
+  location:
+  - 'type command like "back" or "spawn"'
+  - 'you can set the respawn location with command /dr setlocation'
+
+vault:
+  enable: false
+  amount: 10000.0
+
+playerpoints:
+  enable: false
+  amount: 100
+
+punish:
+  enable: false
+  command: 'jail {player} j1'
+
+disable-in-worlds:
+  - otherworld
+
+sound:
+  enable: true
+  countdown: BLOCK_NOTE_PLING
+  respawn: ENTITY_PLAYER_LEVELUP
+
+particle:
+  enable: false
+  type: FIREWORKS_SPARK
+  sound: ENTITY_FIREWORK_SHOOT
