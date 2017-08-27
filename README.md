@@ -11,6 +11,14 @@ punish:
   enable: false
   command: jail {player} j1
 ```
+## Commands
+1. **/dr reload** - *Reload command*
+2. **/dr setlocation [name]** - *Set a respawn location*
+3. **/dr tplocation [name]** - *Teleport to a respawn location*
+4. **/dr removelocation [name]** - *Remove a respawn location*
+5. **/dr location [name]** - *Show info of a respawn location*
+6. **/dr locations** - *Show valid locations*
+- **Aliases:** /dr
 ## Permissions
 - **dr.bypass** - *Permission to cancel the wait respawn process*
 - **dr.help** - *Permission to show display help command*
