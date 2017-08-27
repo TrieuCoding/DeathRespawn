@@ -33,6 +33,18 @@ public class Events implements Listener {
             String world = p.getWorld().getName();
             DeathLog.saveDeathLog(p);
             if (p.hasPermission("dr.bypass")) {
+                for (String s : Config.getConfig().getStringList("respawn.location")) {
+                    try {
+                        p.setOp(true);
+                        plugin.getServer().dispatchCommand(p, s
+                                .replace("{player}", p.getName())
+                                .replace("&", "§"));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        p.setOp(false);
+                    }
+                }
                 return;
             }
             if (worlds.contains(world)) {
