@@ -7,12 +7,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-/**
- * Minecraft 1.8 Title
- *
- * @version 1.0.4
- * @author Maxim Van de Wynckel
- */
+
 public class Title_1_8_R1 {
     /* Title packet */
     private Class<?> packetTitle;
