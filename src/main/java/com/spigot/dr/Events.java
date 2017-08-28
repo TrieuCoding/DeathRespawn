@@ -33,18 +33,26 @@ public class Events implements Listener {
             String world = p.getWorld().getName();
             DeathLog.saveDeathLog(p);
             if (p.hasPermission("dr.bypass")) {
-                for (String s : Config.getConfig().getStringList("respawn.location")) {
-                    try {
-                        p.setOp(true);
-                        plugin.getServer().dispatchCommand(p, s
-                                .replace("{player}", p.getName())
-                                .replace("&", "§"));
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    } finally {
-                        p.setOp(false);
+                p.setHealth(p.getMaxHealth());
+                p.setFoodLevel(20);
+                p.setGameMode(GameMode.valueOf(Config.getConfig().getString("countdown.respawn-gamemode")));
+                if (Config.getConfig().getBoolean("respawn.enable")) {
+                    for (String s : Config.getConfig().getStringList("respawn.location")) {
+                        try {
+                            p.setOp(true);
+                            plugin.getServer().dispatchCommand(p, s
+                                    .replace("{player}", p.getName())
+                                    .replace("&", "§"));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        } finally {
+                            p.setOp(false);
+                        }
                     }
                 }
+                return;
+            }
+            if (p.isOp()) {
                 return;
             }
             if (worlds.contains(world)) {
@@ -145,6 +153,10 @@ public class Events implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
+        if (p.hasPermission("dr.bypass")) { return; }
+        if (p.isOp()) {
+            return;
+        }
         if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
             plugin.getServer().getScheduler().cancelAllTasks();
         }
@@ -154,6 +166,9 @@ public class Events implements Listener {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             if (p.hasPermission("dr.bypass")) { return; }
+            if (p.isOp()) {
+                return;
+            }
             if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
                 if (!Config.getConfig().getBoolean("countdown.damage")) {
                     e.setCancelled(true);
@@ -165,6 +180,9 @@ public class Events implements Listener {
     public void onPlayerMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
         if (p.hasPermission("dr.bypass")) { return; }
+        if (p.isOp()) {
+            return;
+        }
         if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
             if (!Config.getConfig().getBoolean("countdown.move")) {
                 e.setCancelled(true);
@@ -175,6 +193,9 @@ public class Events implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
         if (p.hasPermission("dr.bypass")) { return; }
+        if (p.isOp()) {
+            return;
+        }
         if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
             if (!Config.getConfig().getBoolean("countdown.chat")) {
                 e.setCancelled(true);
@@ -185,6 +206,9 @@ public class Events implements Listener {
     public void onUseCommand(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
         if (p.hasPermission("dr.bypass")) { return; }
+        if (p.isOp()) {
+            return;
+        }
         if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
             if (!Config.getConfig().getBoolean("countdown.use-command")) {
                 e.setCancelled(true);
@@ -196,6 +220,9 @@ public class Events implements Listener {
         Player p = e.getPlayer();
         EconomyResponse r;
         if (p.hasPermission("dr.bypass")) { return; }
+        if (p.isOp()) {
+            return;
+        }
         if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
 
             p.removePotionEffect(PotionEffectType.BLINDNESS);
