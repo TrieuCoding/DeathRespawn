@@ -1,8 +1,7 @@
 package com.spigot.dr;
 
-import com.spigot.dr.utils.Title_1_11_R1;
-import com.spigot.dr.utils.Title_1_8_R1;
-import com.spigot.dr.utils.Title_1_9_R1;
+import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
+import jdk.nashorn.internal.runtime.regexp.joni.ScanEnvironment;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.minecraft.server.v1_12_R1.EnumParticle;
 import org.bukkit.*;
@@ -23,20 +22,20 @@ public class Events implements Listener {
         this.plugin = plugin;
     }
 
-    String i = plugin.getServer().getClass().getPackage().getName();
-    String version = i.substring(i.indexOf(".") + 1);
-
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = e.getEntity();
-            p.setHealth(p.getMaxHealth());
+            Location loc = p.getLocation();
+            double health = p.getMaxHealth();
+            TitleManagerAPI api = (TitleManagerAPI) plugin.getServer().getPluginManager().getPlugin("TitleManager");
+            p.setHealth(health);
             p.setFoodLevel(20);
             List<String> worlds = Config.getConfig().getStringList("disable-in-worlds");
             String world = p.getWorld().getName();
             DeathLog.saveDeathLog(p);
             if (p.hasPermission("dr.bypass")) {
-                p.setHealth(p.getMaxHealth());
+                p.setHealth(health);
                 p.setFoodLevel(20);
                 p.setGameMode(GameMode.valueOf(Config.getConfig().getString("countdown.respawn-gamemode")));
                 if (Config.getConfig().getBoolean("respawn.enable")) {
@@ -78,26 +77,17 @@ public class Events implements Listener {
                                     .replace("{seconds}", String.valueOf(cd1)));
                         }
                         if (Config.getMessageFile().getBoolean("title.enable")) {
-                            if (version.contains("v1_10_R1") || version.contains("v1_11_R1") || version.contains("v_1_12_R1")) {
-                                Title_1_11_R1 title = new Title_1_11_R1(
-                                        Config.getMessageFile().getString("title.title.countdown"),
-                                        Config.getMessageFile().getString("title.subtitle.countdown"),
-                                        0, 60, 0);
-                                title.send(p);
-                            } else if (version.contains("v1_9_R1")) {
-                                Title_1_9_R1 title = new Title_1_9_R1(
-                                        Config.getMessageFile().getString("title.title.countdown"),
-                                        Config.getMessageFile().getString("title.subtitle.countdown"),
-                                        0, 60, 0);
-                                title.send(p);
-                            } else if (version.contains("v1_8_R1") || version.contains("v1_7_R1")) {
-                                Title_1_8_R1 title = new Title_1_8_R1(
-                                        Config.getMessageFile().getString("title.title.countdown"),
-                                        Config.getMessageFile().getString("title.subtitle.countdown"),
-                                        0, 60, 0);
-                                title.send(p);
+                            if (plugin.getServer().getPluginManager().isPluginEnabled("TitleManager")) {
+                                api.sendTitle(p, Config.getMessageFile().getString("title.title.countdown")
+                                        .replace("&", "§"), 0, 60, 0);
+                                api.sendSubtitle(p, Config.getMessageFile().getString("title.subtitle.countdown")
+                                        .replace("&", "§")
+                                        .replace("{seconds}", String.valueOf(cd1)),
+                                        0, 60, 0
+                                );
                             } else {
-                                System.out.println(plugin.cslprefix + "This version is not support!");
+                                System.out.println(plugin.cslprefix + "TitleManager wasn't found!");
+                                Config.getMessageFile().set("message.enable", Boolean.valueOf(true));
                                 Config.getMessageFile().set("title.enable", Boolean.valueOf(false));
                                 Config.saveMessageFile();
                             }
@@ -115,26 +105,15 @@ public class Events implements Listener {
                                     + Config.getMessageFile().getString("message.respawn").replace("&", "§"));
                         }
                         if (Config.getMessageFile().getBoolean("title.enable")) {
-                            if (version.contains("v1_10_R1") || version.contains("v1_11_R1") || version.contains("v_1_12_R1")) {
-                                Title_1_11_R1 title = new Title_1_11_R1(
-                                        Config.getMessageFile().getString("title.title.respawn"),
-                                        Config.getMessageFile().getString("title.subtitle.respawn"),
-                                        0, 40, 20);
-                                title.send(p);
-                            } else if (version.contains("v1_9_R1")) {
-                                Title_1_9_R1 title = new Title_1_9_R1(
-                                        Config.getMessageFile().getString("title.title.respawn"),
-                                        Config.getMessageFile().getString("title.subtitle.respawn"),
-                                        0, 40, 20);
-                                title.send(p);
-                            } else if (version.contains("v1_8_R1") || version.contains("v1_7_R1")) {
-                                Title_1_8_R1 title = new Title_1_8_R1(
-                                        Config.getMessageFile().getString("title.title.respawn"),
-                                        Config.getMessageFile().getString("title.subtitle.respawn"),
-                                        0, 40, 20);
-                                title.send(p);
+                            if (plugin.getServer().getPluginManager().isPluginEnabled("TitleManager")) {
+                                api.sendTitle(p, Config.getMessageFile().getString("title.title.respawn")
+                                        .replace("&", "§"), 0, 60, 0);
+                                api.sendSubtitle(p, Config.getMessageFile().getString("title.subtitle.respawn")
+                                                .replace("&", "§"), 0, 60, 0
+                                );
                             } else {
-                                System.out.println(plugin.cslprefix + "This version is not support!");
+                                System.out.println(plugin.cslprefix + "TitleManager wasn't found!");
+                                Config.getMessageFile().set("message.enable", Boolean.valueOf(true));
                                 Config.getMessageFile().set("title.enable", Boolean.valueOf(false));
                                 Config.saveMessageFile();
                             }
@@ -144,18 +123,18 @@ public class Events implements Listener {
                                     4F, 1F);
                         }
                         if (Config.getConfig().getBoolean("particle.enable")) {
-                            if (!version.contains("v1_12_R1")) {
-                                System.out.println(plugin.cslprefix + ChatColor.RED
-                                        + "The particle system does not work with version 1.11 or lower");
+                            if (ServerVersion.isMC112()) {
+                                Particles packet = new Particles(EnumParticle.valueOf(
+                                        Config.getConfig().getString("particle.type")),
+                                        loc, 0.5f, 0.5f, 0.5f, 0.07f, 80);
+                                packet.sendToPlayer(p);
+                                p.playSound(p.getLocation(), Sound.valueOf(
+                                        Config.getConfig().getString("particle.sound")
+                                ), 4F, 1F);
+                            } else {
+                                System.out.println(plugin.cslprefix + "Particle mode only support 1.12 version!");
                                 Config.getConfig().set("particle.enable", Boolean.valueOf(false));
                                 Config.saveConfig();
-                            } else {
-                                Particles packet = new Particles(
-                                        EnumParticle.valueOf(Config.getConfig().getString("particle.type")),
-                                        p.getLocation(), 0.5f, 0.5f, 0.5f, 0.07f, 80);
-                                packet.sendToPlayer(p);
-                                p.playSound(p.getLocation(), Sound.valueOf(Config.getConfig().getString("particle.sound"))
-                                        , 4F, 1F);
                             }
                         }
                         if (Config.getConfig().getBoolean("respawn.enable")) {

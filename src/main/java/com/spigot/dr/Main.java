@@ -1,6 +1,9 @@
 package com.spigot.dr;
 
+import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -19,9 +22,6 @@ public final class Main extends JavaPlugin {
     public static Economy econ = null;
 
     public String cslprefix = "[DeathRespawn] ";
-
-    String i = getServer().getClass().getPackage().getName();
-    String version = i.substring(i.indexOf(".") + 1);
 
     @Override
     public void onEnable() {
@@ -50,14 +50,29 @@ public final class Main extends JavaPlugin {
             Config.getConfig().set("punish.enable", Boolean.valueOf(true));
             Config.saveConfig();
         }
-        if ((!version.contains("v1_8_R1")) && (!version.contains("v1_7_R1"))) {
-            Config.getConfig().set("sound.countdown", "BLOCK_NOTE_PLING");
-            Config.getConfig().set("sound.respawn", "ENTITY_PLAYER_LEVELUP");
-            Config.saveConfig();
+        try {
+            if (ServerVersion.isMC19() || ServerVersion.isMC110() || ServerVersion.isMC111() || ServerVersion.isMC112()) {
+                Config.getConfig().set("sound.countdown", "BLOCK_NOTE_PLING");
+                Config.getConfig().set("sound.respawn", "ENTITY_PLAYER_LEVELUP");
+                Config.saveConfig();
+            } else if (ServerVersion.isMC18() || ServerVersion.isMC17()){
+                Config.getConfig().set("sound.countdown", "NOTE_PLING");
+                Config.getConfig().set("sound.respawn", "LEVEL_UP");
+                Config.saveConfig();
+            } else {
+                System.out.println(cslprefix + "An error occured while checking version!");
+            }
+        } catch (Exception e) {
+            System.out.println(cslprefix + "An error occured: " + e.getCause());
+        }
+        if (getServer().getPluginManager().isPluginEnabled("TitleManager")) {
+            console.sendMessage(cslprefix + "TitleManager was found!");
+            Config.getMessageFile().set("title.enable", Boolean.valueOf(true));
+            Config.saveMessageFile();
         } else {
-            Config.getConfig().set("sound.countdown", "NOTE_PLING");
-            Config.getConfig().set("sound.respawn", "LEVEL_UP");
-            Config.saveConfig();
+            console.sendMessage(cslprefix + "TitleManager wasn't found!");
+            Config.getMessageFile().set("message.enable", Boolean.valueOf(true));
+            Config.saveMessageFile();
         }
         if (Config.getConfig().getString("countdown.countdown-gamemode") == null) {
             Config.getConfig().set("countdown.countdown-gamemode", "SPECTATOR");

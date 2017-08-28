@@ -9,7 +9,7 @@ message:
   countdown: '&fYou will be respawn in &e{seconds} &fseconds'
   respawn: '&aYou have been respawn!'
 title:
-  enable: true
+  enable: false
   title:
     countdown: '&c&lYOU DIED'
     respawn: '&c&lRESPAWN'

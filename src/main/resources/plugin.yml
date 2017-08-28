@@ -1,9 +1,8 @@
 name: DeathRespawn
-version: 1.0
+version: 1.1
 main: com.spigot.dr.Main
 prefix: DeathRespawn
-load: STARTUP
-softdepend: [Vault]
+softdepend: [Vault, TitleManager]
 authors: [TrieuCoding]
 description: A plugin added cooldown to respawn
 
