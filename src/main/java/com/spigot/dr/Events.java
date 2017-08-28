@@ -195,7 +195,6 @@ public class Events implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         EconomyResponse r;
-        double m = Main.econ.getBalance(p);
         if (p.hasPermission("dr.bypass")) { return; }
         if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
 
@@ -207,8 +206,9 @@ public class Events implements Listener {
             plugin.getServer().getScheduler().cancelAllTasks();
 
             if (Config.getConfig().getBoolean("vault.enable")) {
+                double m = plugin.econ.getBalance(p);
                 if (m >= Config.getConfig().getDouble("vault.amount")) {
-                    r = Main.econ.withdrawPlayer(p, Config.getConfig().getDouble("vault.amount"));
+                    r = plugin.econ.withdrawPlayer(p, Config.getConfig().getDouble("vault.amount"));
                     if (r.transactionSuccess()) {
                         p.sendMessage(Config.getMessageFile().getString("prefix").replace("&", "§")
                                 + Config.getMessageFile().getString("vault-notify").replace("&", "§")
@@ -217,7 +217,7 @@ public class Events implements Listener {
                         System.out.print(plugin.cslprefix + "§cAn error occured: " + r.errorMessage);
                     }
                 } else {
-                    r = Main.econ.withdrawPlayer(p, m);
+                    r = plugin.econ.withdrawPlayer(p, m);
                     if (r.transactionSuccess()) {
                         p.sendMessage(Config.getMessageFile().getString("prefix").replace("&", "§")
                                 + Config.getMessageFile().getString("vault-notify").replace("&", "§")
