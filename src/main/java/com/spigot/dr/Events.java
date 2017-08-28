@@ -1,5 +1,8 @@
 package com.spigot.dr;
 
+import com.spigot.dr.utils.Title_1_11_R1;
+import com.spigot.dr.utils.Title_1_8_R1;
+import com.spigot.dr.utils.Title_1_9_R1;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.minecraft.server.v1_12_R1.EnumParticle;
 import org.bukkit.*;
@@ -75,12 +78,29 @@ public class Events implements Listener {
                                     .replace("{seconds}", String.valueOf(cd1)));
                         }
                         if (Config.getMessageFile().getBoolean("title.enable")) {
-                            Utils.sendTitle(p, Config.getMessageFile().getString("title.title.countdown")
-                                            .replace("&", "§"),
-                                    Config.getMessageFile().getString("title.subtitle.countdown")
-                                            .replace("&", "§")
-                                            .replace("{seconds}", String.valueOf(cd1)),
-                                    0, 60, 40);
+                            if (version.contains("v1_10_R1") || version.contains("v1_11_R1") || version.contains("v_1_12_R1")) {
+                                Title_1_11_R1 title = new Title_1_11_R1(
+                                        Config.getMessageFile().getString("title.title.countdown"),
+                                        Config.getMessageFile().getString("title.subtitle.countdown"),
+                                        0, 60, 0);
+                                title.send(p);
+                            } else if (version.contains("v1_9_R1")) {
+                                Title_1_9_R1 title = new Title_1_9_R1(
+                                        Config.getMessageFile().getString("title.title.countdown"),
+                                        Config.getMessageFile().getString("title.subtitle.countdown"),
+                                        0, 60, 0);
+                                title.send(p);
+                            } else if (version.contains("v1_8_R1") || version.contains("v1_7_R1")) {
+                                Title_1_8_R1 title = new Title_1_8_R1(
+                                        Config.getMessageFile().getString("title.title.countdown"),
+                                        Config.getMessageFile().getString("title.subtitle.countdown"),
+                                        0, 60, 0);
+                                title.send(p);
+                            } else {
+                                System.out.println(plugin.cslprefix + "This version is not support!");
+                                Config.getMessageFile().set("title.enable", Boolean.valueOf(false));
+                                Config.saveMessageFile();
+                            }
                         }
                         if (Config.getConfig().getBoolean("sound.enable")) {
                             p.playSound(p.getLocation(), Sound.valueOf(Config.getConfig().getString("sound.countdown")),
@@ -95,11 +115,29 @@ public class Events implements Listener {
                                     + Config.getMessageFile().getString("message.respawn").replace("&", "§"));
                         }
                         if (Config.getMessageFile().getBoolean("title.enable")) {
-                            Utils.sendTitle(p, Config.getMessageFile().getString("title.title.respawn")
-                                            .replace("&", "§"),
-                                    Config.getMessageFile().getString("title.subtitle.respawn")
-                                            .replace("&", "§"),
-                                    0, 40, 20);
+                            if (version.contains("v1_10_R1") || version.contains("v1_11_R1") || version.contains("v_1_12_R1")) {
+                                Title_1_11_R1 title = new Title_1_11_R1(
+                                        Config.getMessageFile().getString("title.title.respawn"),
+                                        Config.getMessageFile().getString("title.subtitle.respawn"),
+                                        0, 40, 20);
+                                title.send(p);
+                            } else if (version.contains("v1_9_R1")) {
+                                Title_1_9_R1 title = new Title_1_9_R1(
+                                        Config.getMessageFile().getString("title.title.respawn"),
+                                        Config.getMessageFile().getString("title.subtitle.respawn"),
+                                        0, 40, 20);
+                                title.send(p);
+                            } else if (version.contains("v1_8_R1") || version.contains("v1_7_R1")) {
+                                Title_1_8_R1 title = new Title_1_8_R1(
+                                        Config.getMessageFile().getString("title.title.respawn"),
+                                        Config.getMessageFile().getString("title.subtitle.respawn"),
+                                        0, 40, 20);
+                                title.send(p);
+                            } else {
+                                System.out.println(plugin.cslprefix + "This version is not support!");
+                                Config.getMessageFile().set("title.enable", Boolean.valueOf(false));
+                                Config.saveMessageFile();
+                            }
                         }
                         if (Config.getConfig().getBoolean("sound.enable")) {
                             p.playSound(p.getLocation(), Sound.valueOf(Config.getConfig().getString("sound.respawn")),
