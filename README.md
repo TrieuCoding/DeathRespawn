@@ -19,6 +19,21 @@ punish:
   enable: false
   command: jail {player} j1
 ```
+- [TitleManager](https://www.spigotmc.org/resources/titlemanager.1049/) - If TitleManager is not setup, it will disable Title feature and enable "Messages" feature
+```
+message:
+  enable: false
+  countdown: '&fYou will be respawn in &e{seconds} &fseconds'
+  respawn: '&aYou have been respawn!'
+title:
+  enable: true
+  title:
+    countdown: '&c&lYOU DIED'
+    respawn: '&c&lRESPAWN'
+  subtitle:
+    countdown: '&fYou will be respawn in &e{seconds} &fseconds'
+    respawn: '&fYou have been respawn!'
+```
 ## Commands
 1. **/dr reload** - *Reload command*
 2. **/dr setlocation [name]** - *Set a respawn location*
