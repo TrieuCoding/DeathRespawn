@@ -46,7 +46,7 @@ public final class Main extends JavaPlugin {
             Config.getConfig().set("vault.enable", Boolean.valueOf(true));
             Config.saveConfig();
         } else {
-            console.sendMessage(cslprefix + "Economy, PlayerPoints wasn't found! Enable punish mode in config!");
+            console.sendMessage(cslprefix + "Economy wasn't found! Enable punish mode in config!");
             Config.getConfig().set("punish.enable", Boolean.valueOf(true));
             Config.saveConfig();
         }
