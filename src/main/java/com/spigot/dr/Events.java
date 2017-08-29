@@ -1,7 +1,6 @@
 package com.spigot.dr;
 
 import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
-import jdk.nashorn.internal.runtime.regexp.joni.ScanEnvironment;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.minecraft.server.v1_12_R1.EnumParticle;
 import org.bukkit.*;
@@ -40,15 +39,17 @@ public class Events implements Listener {
                 p.setGameMode(GameMode.valueOf(Config.getConfig().getString("countdown.respawn-gamemode")));
                 if (Config.getConfig().getBoolean("respawn.enable")) {
                     for (String s : Config.getConfig().getStringList("respawn.location")) {
-                        try {
-                            p.setOp(true);
-                            plugin.getServer().dispatchCommand(p, s
-                                    .replace("{player}", p.getName())
-                                    .replace("&", "§"));
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        } finally {
-                            p.setOp(false);
+                        if (!p.isOp()) {
+                            try {
+                                p.setOp(true);
+                                plugin.getServer().dispatchCommand(p, s
+                                        .replace("{player}", p.getName())
+                                        .replace("&", "§"));
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            } finally {
+                                p.setOp(false);
+                            }
                         }
                     }
                 }
@@ -139,15 +140,17 @@ public class Events implements Listener {
                         }
                         if (Config.getConfig().getBoolean("respawn.enable")) {
                             for (String s : Config.getConfig().getStringList("respawn.location")) {
-                                try {
-                                    p.setOp(true);
-                                    plugin.getServer().dispatchCommand(p, s
-                                            .replace("{player}", p.getName())
-                                            .replace("&", "§"));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                } finally {
-                                    p.setOp(false);
+                                if (!p.isOp()) {
+                                    try {
+                                        p.setOp(true);
+                                        plugin.getServer().dispatchCommand(p, s
+                                                .replace("{player}", p.getName())
+                                                .replace("&", "§"));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        p.setOp(false);
+                                    }
                                 }
                             }
                         } else {
