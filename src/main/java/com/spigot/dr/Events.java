@@ -139,9 +139,7 @@ public class Events implements Listener {
                             }
                         }
                         if (Config.getConfig().getBoolean("experience.drop")) {
-                            e.setDroppedExp(Config.getConfig().getInt("experience.amount"));
-                        } else {
-                            e.setDroppedExp(0);
+                            p.setTotalExperience((p.getTotalExperience() - Config.getConfig().getInt("experience.amount")));
                         }
                         if (Config.getConfig().getBoolean("respawn.enable")) {
                             if (Config.getConfig().getBoolean("bed")) {
