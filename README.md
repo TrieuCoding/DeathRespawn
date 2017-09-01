@@ -68,8 +68,12 @@ countdown:
   chat: true
   use-command: false
   blindness: true
+  pickup: false
+  vanish: false
+  hunger: false
 respawn:
   enable: false
+  bed: true
   location:
   - type command like "back" or "spawn"
   - you can set the respawn location with command /dr setlocation
@@ -101,8 +105,12 @@ countdown:
   chat: true
   use-command: false
   blindness: true
+  pickup: false
+  vanish: true
+  hunger: false
 respawn:
   enable: false
+  bed: false
   location:
   - 'dr tplocation test'
 vault:
