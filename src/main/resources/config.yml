@@ -9,8 +9,13 @@ countdown:
   use-command: false
   blindness: true
 
+experience:
+  drop: false
+  amount: 20
+
 respawn:
   enable: false
+  bed: true
   location:
   - 'type command like "back" or "spawn"'
   - 'you can set the respawn location with command /dr setlocation'

@@ -138,18 +138,35 @@ public class Events implements Listener {
                                 Config.saveConfig();
                             }
                         }
+                        if (Config.getConfig().getBoolean("experience.drop")) {
+                            e.setDroppedExp(Config.getConfig().getInt("experience.amount"));
+                        } else {
+                            e.setDroppedExp(0);
+                        }
                         if (Config.getConfig().getBoolean("respawn.enable")) {
-                            for (String s : Config.getConfig().getStringList("respawn.location")) {
-                                if (!p.isOp()) {
-                                    try {
-                                        p.setOp(true);
-                                        plugin.getServer().dispatchCommand(p, s
-                                                .replace("{player}", p.getName())
-                                                .replace("&", "§"));
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        p.setOp(false);
+                            if (Config.getConfig().getBoolean("bed")) {
+                                try {
+                                    if (p.getBedSpawnLocation() != null) {
+                                        p.teleport(p.getBedSpawnLocation());
+                                    } else {
+                                        p.sendMessage(ChatColor.RED + "An error occured while teleport to bed location: null");
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                for (String s : Config.getConfig().getStringList("respawn.location")) {
+                                    if (!p.isOp()) {
+                                        try {
+                                            p.setOp(true);
+                                            plugin.getServer().dispatchCommand(p, s
+                                                    .replace("{player}", p.getName())
+                                                    .replace("&", "§"));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            p.setOp(false);
+                                        }
                                     }
                                 }
                             }
