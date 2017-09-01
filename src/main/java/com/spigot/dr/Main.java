@@ -1,9 +1,6 @@
 package com.spigot.dr;
 
-import io.puharesource.mc.titlemanager.api.v2.TitleManagerAPI;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;

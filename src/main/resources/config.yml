@@ -8,10 +8,9 @@ countdown:
   chat: true
   use-command: false
   blindness: true
-
-experience:
-  drop: false
-  amount: 20
+  pickup: false
+  vanish: false
+  hunger: false
 
 respawn:
   enable: false

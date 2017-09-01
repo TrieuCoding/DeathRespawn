@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
@@ -65,6 +66,9 @@ public class Events implements Listener {
             if (Config.getConfig().getBoolean("countdown.blindness")) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 255));
             }
+            if (!Config.getConfig().getBoolean("countdown.pickup")) {
+                p.setCanPickupItems(false);
+            }
             plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
                 int cd1 = Config.getConfig().getInt("respawn-cooldown");
                 int cd2 = Config.getConfig().getInt("respawn-cooldown");
@@ -96,6 +100,11 @@ public class Events implements Listener {
                         if (Config.getConfig().getBoolean("sound.enable")) {
                             p.playSound(p.getLocation(), Sound.valueOf(Config.getConfig().getString("sound.countdown")),
                                     4F, 1F);
+                        }
+                        if (Config.getConfig().getBoolean("countdown.vanish")) {
+                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                player.hidePlayer(p);
+                            }
                         }
                         this.cd1--;
                     } else {
@@ -138,16 +147,28 @@ public class Events implements Listener {
                                 Config.saveConfig();
                             }
                         }
-                        if (Config.getConfig().getBoolean("experience.drop")) {
-                            p.setTotalExperience((p.getTotalExperience() - Config.getConfig().getInt("experience.amount")));
+                        if (Config.getConfig().getBoolean("countdown.vanish")) {
+                            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                                player.showPlayer(p);
+                            }
+                        }
+                        if (!Config.getConfig().getBoolean("countdown.pickup")) {
+                            p.setCanPickupItems(true);
                         }
                         if (Config.getConfig().getBoolean("respawn.enable")) {
-                            if (Config.getConfig().getBoolean("bed")) {
+                            if (Config.getConfig().getBoolean("respawn.bed")) {
                                 try {
                                     if (p.getBedSpawnLocation() != null) {
                                         p.teleport(p.getBedSpawnLocation());
+                                        p.sendMessage(ChatColor.GREEN + "Teleport to your bed location.");
                                     } else {
-                                        p.sendMessage(ChatColor.RED + "An error occured while teleport to bed location: null");
+                                        p.sendMessage(ChatColor.RED + "Missing bed location, teleport to your death location.");
+                                        String w = Config.getDeathLog().getString(p.getUniqueId().toString() + ".world");
+                                        World world = plugin.getServer().getWorld(w);
+                                        p.teleport(new Location(world
+                                                , Config.getDeathLog().getDouble(p.getUniqueId().toString() + ".x"),
+                                                Config.getDeathLog().getDouble(p.getUniqueId().toString() + ".y"),
+                                                Config.getDeathLog().getDouble(p.getUniqueId().toString() + ".z")));
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -197,6 +218,21 @@ public class Events implements Listener {
         }
     }
     @EventHandler
+    public void onFoodChange(FoodLevelChangeEvent e) {
+        if (e.getEntity() instanceof Player) {
+            Player p = (Player) e.getEntity();
+            if (p.hasPermission("dr.bypass")) { return; }
+            if (p.isOp()) {
+                return;
+            }
+            if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
+                if (!Config.getConfig().getBoolean("countdown.hunger")) {
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+    @EventHandler
     public void onPlayerDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
@@ -214,13 +250,17 @@ public class Events implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
+        Location from = e.getFrom();
+        Location to = e.getTo();
         if (p.hasPermission("dr.bypass")) { return; }
         if (p.isOp()) {
             return;
         }
         if (Config.getDeathLog().getBoolean(p.getUniqueId().toString() + ".isDead")) {
             if (!Config.getConfig().getBoolean("countdown.move")) {
-                e.setCancelled(true);
+                if (from.getZ() != to.getZ() && from.getX() != to.getX()) {
+                    p.teleport(from);
+                }
             }
         }
     }
